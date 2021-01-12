@@ -1,30 +1,57 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Drinks } from '../component/Drinks';
 import { BaseButton } from '../component/BaseButton';
 import { Icon } from "../assets/Icon";
 import styled from 'styled-components';
 
 export const Main = () => {
+
+    const [userMoney, setUserMoney] = useState(0);
+    
+    const receiveUserMoneyEvent = (e) => {      
+        const copyUserMoney = Number(e.target.innerText);
+        const addUserMoney =  copyUserMoney + userMoney;
+        setUserMoney(addUserMoney);
+    }
+
+    const returnUserMoneyEvent = () => {
+        setUserMoney(0);
+    }
+
+    const handleUserMoneyChange = (price) => {
+        if(userMoney > price){
+            const minusUserMoney = userMoney - price;
+            setUserMoney(minusUserMoney);
+        }
+        else if(userMoney < price){
+            return alert('금액이 부족합니다');
+        }        
+    }
+
     return (
         <Container>
             { Drinks.map(drink => {
                 return <Items key={drink.id}>
-                            <Icon width="100" height="100" fill="blue" />
+                            <Icon width="140" height="140" fill={drink.color} />
                             {drink.name}
                             <br />
                             {drink.price}
                             <br />
-                            <BaseButton>
+                            <BaseButton onClick={() => {handleUserMoneyChange(drink.price)}}>
                                 {drink.count > 0 ? "구매" : "품절"}
                             </BaseButton>
                         </Items>
             })}
             <ButtonCantainer>
-                <BaseButton>10000</BaseButton>
-                <BaseButton>5000</BaseButton>
-                <BaseButton>1000</BaseButton>
-                <BaseButton>500</BaseButton>
+                <BaseButton onClick={receiveUserMoneyEvent}>10000</BaseButton>
+                <BaseButton onClick={receiveUserMoneyEvent}>5000</BaseButton>
+                <BaseButton onClick={receiveUserMoneyEvent}>1000</BaseButton>
+                <BaseButton onClick={receiveUserMoneyEvent}>500</BaseButton>
+                <BaseButton onClick={returnUserMoneyEvent}>반환</BaseButton>
             </ButtonCantainer>
+            <ShowMoneyDiv>
+                {userMoney}
+            </ShowMoneyDiv>
         </Container>
     )
 }
@@ -45,10 +72,13 @@ const Items = styled.div`
     text-align: center;
     font-size: 20px;
     padding: 10px 40px;
-    margin: 5px;
-    
+    margin: 5px;   
 `
 
 const ButtonCantainer = styled.div`
     
+`
+
+const ShowMoneyDiv = styled.div`
+    padding-left: 50px;
 `

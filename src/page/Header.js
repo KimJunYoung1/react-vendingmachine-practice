@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
-const API_KEY = API_KEY;
+const API_KEY = "29b4b116455aa9b96f3e35cd7af9a759";
 
 export const Header = () => {
 

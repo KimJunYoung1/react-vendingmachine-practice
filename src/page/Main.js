@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Drinks } from '../component/Drinks';
+import { Drinks } from '../Data';
 import { BaseButton } from '../component/BaseButton';
 import { Icon } from "../assets/Icon";
 import styled from 'styled-components';
@@ -18,12 +18,17 @@ export const Main = () => {
         setUserMoney(0);
     }
 
-    const handleUserMoneyChange = (price) => {
-        if(userMoney > price){
-            const minusUserMoney = userMoney - price;
+    const handleUserMoneyChange = (price, count) => {
+        
+
+        if(userMoney >= price && count >= 0){
+            const minusUserMoney = userMoney - price;            
             setUserMoney(minusUserMoney);
         }
-        else if(userMoney < price){
+        else if(count <= 0){
+            return alert('현재 품절입니다')
+        }
+        else {
             return alert('금액이 부족합니다');
         }        
     }
@@ -32,12 +37,12 @@ export const Main = () => {
         <Container>
             { Drinks.map(drink => {
                 return <Items key={drink.id}>
-                            <Icon width="140" height="140" fill={drink.color} />
+                            <Icon width="140" height="140" labelColor={drink.labelColor} fillColor={drink.fillColor} />
                             {drink.name}
                             <br />
                             {drink.price}
                             <br />
-                            <BaseButton onClick={() => {handleUserMoneyChange(drink.price)}}>
+                            <BaseButton drinkData onClick={() => {handleUserMoneyChange(drink.price, drink.count = drink.count - 1)}}>                                                                                                                            
                                 {drink.count > 0 ? "구매" : "품절"}
                             </BaseButton>
                         </Items>
